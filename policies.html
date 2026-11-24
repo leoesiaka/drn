@@ -1,0 +1,1646 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>DRN UK — Programmes & Initiatives</title>
+  <meta name="description" content="Programmes, pilots and initiatives from the Digital Resilience Network UK — exercises, labs, and hands-on work to strengthen continuity." />
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ========= Root tokens ========= */
+    :root{
+      --bg:#06142e;
+      --panel:#0a2350;
+      --accent:#22d3c5; /* warm yellow */
+      --accent-2:#3b8cff; /* cyan */
+      --muted:#9fb0c1;
+      --text:#eaf6ff;
+      --glass: rgba(255,255,255,0.03);
+      --radius: 12px;
+      --max-width:1200px;
+      --ease: cubic-bezier(.2,.9,.2,1);
+
+      /* glass tuning */
+      --glass-blur: 12px;
+      --glass-sheen: 0.08;
+      --glass-contrast: 0.06;
+    }
+
+    /* ========= Global reset ========= */
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+      color:var(--text);
+      background:linear-gradient(180deg,var(--bg),#04102a);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.45;
+    }
+    /* ---- BACKGROUND-ONLY (paste this in place of your current body / #bg-video / #bg-overlay rules) ---- */
+
+/* keep your :root as-is above — this only changes the visual background layers */
+body{
+  /* only background/visual properties — no spacing or layout changes */
+  background: linear-gradient(180deg, var(--bg), #04102a);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* animated layered blue underlay (fixed, doesn't affect layout or spacing) */
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:-3;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at 12% 20%, rgba(59,140,255,0.14), transparent 12%),
+    radial-gradient(circle at 82% 78%, rgba(59,140,255,0.06), transparent 18%),
+    linear-gradient(180deg, rgba(5,20,40,0.70), rgba(2,8,22,0.85));
+  filter: saturate(1.06) contrast(1.02);
+  transform-origin:center;
+  will-change:transform, opacity;
+  animation: bgFloat 20s ease-in-out infinite;
+  backdrop-filter: blur(2px); /* purely visual */
+}
+
+/* faint sheen/highlight layer */
+body::after{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:-2;
+  pointer-events:none;
+  background-image:
+    radial-gradient(circle at 35% 30%, rgba(59,140,255,0.06), transparent 6%),
+    radial-gradient(circle at 70% 65%, rgba(34,211,197,0.02), transparent 12%);
+  mix-blend-mode: screen;
+  opacity:0.95;
+  transform: translateZ(0);
+}
+
+/* gentle floating animation for the layered background */
+@keyframes bgFloat{
+  0%   { transform: scale(1) translateY(0) translateX(0); }
+  50%  { transform: scale(1.03) translateY(-2%) translateX(1.5%); }
+  100% { transform: scale(1) translateY(0) translateX(0); }
+}
+
+/* background video — only visual adjustments (opacity/filter) so blue layers show through */
+#bg-video{
+  position:fixed;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  z-index:-4;
+  transform-origin:center center;
+  transition:transform 900ms cubic-bezier(.2,.9,.2,1);
+  opacity:0.55; /* lower so the blue layers remain visible */
+  filter: saturate(0.92) contrast(0.95) brightness(0.95);
+}
+
+/* overlay tint for video / static fallback */
+#bg-overlay{
+  position:fixed;
+  inset:0;
+  z-index:-3;
+  pointer-events:none;
+  background:
+    linear-gradient(180deg, rgba(3,18,36,0.28), rgba(1,6,18,0.55)),
+    radial-gradient(circle at 20% 10%, rgba(59,140,255,0.06), transparent 12%);
+  mix-blend-mode: overlay;
+}
+
+/* optional subtle noise — purely visual, fixed, doesn't change spacing */
+.noise {
+  pointer-events:none;
+  position: fixed;
+  inset:0;
+  z-index:-1;
+  opacity:0.06;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'><filter id='g'><feTurbulence baseFrequency='0.8' numOctaves='1' stitchTiles='stitch' /><feColorMatrix type='saturate' values='0'/></filter><rect width='100%' height='100%' filter='url(%23g)' opacity='0.8' fill='%23000' /></svg>");
+  mix-blend-mode: overlay;
+}
+
+/* responsive tweak only for animation speed (no layout change) */
+@media (max-width:720px){
+  body::before{ animation-duration:28s; }
+}
+    a, a:visited { color:inherit; text-decoration:none }
+    img{max-width:100%;height:auto;display:block}
+
+    /* ========= Layout container ========= */
+    .wrap{ max-width:var(--max-width); margin:0 auto; padding:20px; }
+
+    /* background video */
+    #bg-video{position:fixed;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;transform-origin:center center;transition:transform 900ms cubic-bezier(.2,.9,.2,1)}
+    #bg-overlay{position:fixed;inset:0;background:linear-gradient(180deg, rgba(2,10,20,0.35), rgba(0,6,18,0.6));z-index:-1;pointer-events:none}
+
+    /* chevron */
+    .chev{font-size:12px;opacity:0.8}
+    footer.site-foot { margin-top: 72px; }
+
+    footer.site-foot::before { content: ""; display: block; height: 24px; }
+
+    /* ====== BUTTON STYLES (improved) ====== */
+    .btn{ display:inline-flex;align-items:center;gap:10px;padding:12px 18px;border-radius:12px;border:0;background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#031422;font-weight:800;font-size:15px;box-shadow:0 12px 30px rgba(59,140,255,0.08);transition:transform .16s var(--ease),box-shadow .16s var(--ease),filter .16s var(--ease); }
+    .btn:hover{ transform:translateY(-4px); box-shadow:0 26px 60px rgba(59,140,255,0.12) }
+    .btn:active{ transform:translateY(-1px); }
+    .btn:focus{ outline:3px solid rgba(59,140,255,0.14); outline-offset:3px }
+
+    .btn-ghost{ display:inline-flex;align-items:center;gap:10px;padding:10px 14px;border-radius:12px;border:1px solid rgba(255,255,255,0.08);background:transparent;color:var(--text);font-weight:700;transition:background .14s var(--ease),transform .14s var(--ease); }
+    .btn-ghost:hover{ background:rgba(255,255,255,0.02); transform:translateY(-3px) }
+
+    .btn-ghost.secondary{ border:1px solid rgba(255,255,255,0.06); background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005)); color:var(--text); }
+
+    .btn-subscribe{ padding:10px 14px;border-radius:10px;border:0;background:linear-gradient(90deg,var(--accent-2),var(--accent));color:#031422;font-weight:800;box-shadow:0 12px 30px rgba(59,140,255,0.06);font-size:14px;display:inline-flex;align-items:center;gap:8px }
+    .btn-subscribe:hover{ transform:translateY(-3px) }
+
+    .btn-icon{ width:18px;height:18px;display:inline-block }
+
+    /* Dropdown (keeps same behaviour) */
+    .dropdown{ position:absolute; left:0; top:calc(100% - 6px); min-width:260px; padding:12px; border-radius:12px; background:#0a1f44; visibility:hidden; opacity:0; pointer-events:none; transform:translateY(-6px); transition:opacity .22s var(--ease), transform .22s var(--ease), visibility .01s linear .22s; border:1px solid rgba(255,255,255,0.06); box-shadow:0 28px 60px rgba(2,6,12,0.9); z-index:9999 }
+    .nav-links li.open > .dropdown, .nav-links li:focus-within > .dropdown { visibility:visible; opacity:1; pointer-events:auto; transform:none; transition-delay:0s }
+
+    /* ========= Page main ========= */
+    main{ padding:28px 20px 48px; max-width:var(--max-width); margin:0 auto; }
+
+  
+    /* Footer (rich) */
+    footer.site-foot{ margin-top:42px; padding:42px 20px 80px; background:linear-gradient(180deg,#06142e, rgba(0,8,20,0.2)); border-top:1px solid rgba(255,255,255,0.03) }
+    .foot-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:18px; max-width:var(--max-width); margin:0 auto }
+    .foot-grid h4{ margin-top:0 }
+    .socials{ display:flex; gap:8px; margin-top:8px }
+    .socials a{ display:inline-flex; align-items:center; justify-content:center; width:36px; height:36px; border-radius:8px; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.03) }
+
+    /* small helpers */
+    .muted{ color:var(--muted) }
+    .sr-only{ position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden }
+
+    /* reveal helper */
+    .card, .feature, .intro-card, .aside-card { opacity:0; transform:translateY(10px); transition:opacity .48s ease, transform .48s ease }
+    .reveal{ opacity:1; transform:none }
+
+    /* prefers-reduced-transparency */
+    @media (prefers-reduced-transparency: reduce){
+      .feature, .intro-card, .aside-card, .get-involved, .leader { backdrop-filter: none !important; box-shadow: 0 18px 40px rgba(2,8,14,0.72) !important; }
+      .feature::before, .intro-card::before, .aside-card::before { display:none }
+    }
+
+  </style>
+</head>
+<body>
+  <!-- optional background video (replace src if you have one) -->
+  <video id="bg-video" autoplay muted loop playsinline aria-hidden="true">
+    <source src="images/17235-280035997.mp4" type="video/mp4">
+  </video>
+  <div id="bg-overlay" aria-hidden="true"></div>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Contact — Digital Resilience Network UK (Nav Demo)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#06142e; --panel:#0a2350; --accent:#22d3c5; --accent-2:#3b8cff;
+      --muted:#9fb0c1; --text:#eaf6ff; --glass:rgba(255,255,255,0.03); --max-width:1180px;
+      --radius:14px;
+      --nav-height:72px;
+      --mobile-menu-width:320px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;font-family:Inter,system-ui,-apple-system,'Segoe UI',Roboto,Arial;color:var(--text);background:linear-gradient(180deg,var(--bg),#04102a);-webkit-font-smoothing:antialiased}
+    a, a:visited{color:inherit;text-decoration:none}
+    .wrap{max-width:var(--max-width);margin:0 auto;padding:18px 20px}
+
+    /* ========== HEADER + NAV ========== */
+    header.site-header{
+      position:sticky;
+      top:0;
+      z-index:120;
+      background:linear-gradient(180deg, rgba(5,20,40,0.75), rgba(5,20,40,0.35));
+      backdrop-filter:blur(8px);
+      border-bottom:1px solid rgba(255,255,255,0.04);
+    }
+    .nav-inner{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      padding:12px 18px;
+      max-width:var(--max-width);
+      margin:0 auto;
+      height:var(--nav-height);
+    }
+
+    .brand{display:flex;align-items:center;gap:12px}
+    .brand img{width:48px;height:48px;border-radius:8px;object-fit:cover;border:1px solid rgba(255,255,255,0.06);box-shadow:0 6px 18px rgba(2,8,14,0.6)}
+    .brand h1{font-family:Merriweather,serif;margin:0;font-size:16px}
+    .brand small{display:block;color:var(--muted);font-size:12px}
+
+    nav.primary { display:flex; align-items:center; gap:16px; flex:1; }
+
+    /* Desktop nav links */
+    .nav-links {
+      display:flex;
+      gap:6px;
+      align-items:center;
+      margin-left:8px;
+    }
+    .nav-links li { list-style:none; position:relative; }
+    .nav-links > li > a {
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:10px 14px;
+      border-radius:8px;
+      font-weight:600;
+      color:#d8eefc;
+    }
+    .nav-links > li:hover > a { background: rgba(255,255,255,0.03); }
+    .nav-links .dropdown {
+      position:absolute;
+      left:0;
+      top:calc(100% + 8px);
+      min-width:220px;
+      padding:10px;
+      border-radius:10px;
+      background:#0a1f44;
+      border:1px solid rgba(255,255,255,0.04);
+      box-shadow:0 18px 40px rgba(0,0,0,0.6);
+      visibility:hidden; opacity:0; transform:translateY(-6px);
+      transition:opacity .18s, transform .18s, visibility .01s .18s;
+      z-index:50;
+    }
+    .nav-links li.open > .dropdown,
+    .nav-links li:focus-within > .dropdown {
+      visibility:visible; opacity:1; transform:translateY(0); transition-delay:0s;
+    }
+    .nav-links .dropdown a { display:block; padding:8px 10px; border-radius:8px; color:var(--text); font-weight:600; }
+    .nav-links .dropdown a:hover { background: rgba(255,255,255,0.03); }
+
+    .header-cta { display:flex;align-items:center;gap:10px; margin-left:auto; }
+    .cta{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:10px;background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#031422;font-weight:800;border:0;box-shadow:0 8px 30px rgba(34,211,197,0.12)}
+    .btn-ghost{padding:8px 12px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));color:#d8eefc;backdrop-filter:blur(6px)}
+
+    /* Mobile toggle (hamburger) */
+    .mobile-toggle {
+      display:none; /* shown by media queries */
+      background:transparent;
+      border:0;
+      padding:8px;
+      gap:6px;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+      color:var(--text);
+      border-radius:10px;
+      transition:background .18s, transform .12s;
+    }
+    .mobile-toggle:focus { outline:2px solid rgba(59,140,255,0.18); }
+    .hamburger {
+      width:28px; height:18px; display:inline-block; position:relative;
+    }
+    .hamburger span {
+      position:absolute; left:0; right:0; height:2px; background:var(--text); border-radius:2px; transition:transform .18s ease, opacity .12s ease, top .18s;
+    }
+    .hamburger span:nth-child(1){ top:0 }
+    .hamburger span:nth-child(2){ top:8px }
+    .hamburger span:nth-child(3){ top:16px }
+
+    /* Active state (when menu open) */
+    .mobile-toggle.open .hamburger span:nth-child(1){ transform:translateY(8px) rotate(45deg); top:8px; }
+    .mobile-toggle.open .hamburger span:nth-child(2){ opacity:0; }
+    .mobile-toggle.open .hamburger span:nth-child(3){ transform:translateY(-8px) rotate(-45deg); top:8px; }
+
+    /* Mobile Menu (slide-in from right) */
+    .mobile-backdrop {
+      position:fixed; inset:0; background:rgba(2,6,12,0.46); opacity:0; visibility:hidden; transition:opacity .22s; z-index:140;
+    }
+    .mobile-backdrop.visible { opacity:1; visibility:visible; }
+
+    #mobile-menu {
+      position:fixed;
+      top:0;
+      right:0;
+      height:100%;
+      width:var(--mobile-menu-width);
+      max-width:100%;
+      background:linear-gradient(180deg, rgba(3,12,20,0.98), rgba(4,18,30,0.98));
+      transform:translateX(110%);
+      transition:transform .28s cubic-bezier(.2,.9,.2,1);
+      z-index:150;
+      display:flex;
+      flex-direction:column;
+      padding:20px;
+      gap:12px;
+      box-shadow:-30px 0 60px rgba(0,0,0,0.6);
+      border-left:1px solid rgba(255,255,255,0.03);
+    }
+    #mobile-menu.open { transform:translateX(0); }
+
+    #mobile-menu .top-row { display:flex; align-items:center; justify-content:space-between; gap:8px; }
+    .mobile-close { background:transparent; border:0; color:var(--text); font-size:22px; padding:8px; cursor:pointer; border-radius:8px; }
+    .mobile-close:focus { outline:2px solid rgba(59,140,255,0.18); }
+
+    .mobile-links { display:flex; flex-direction:column; gap:6px; margin-top:6px; overflow:auto; padding-bottom:24px; }
+    .mobile-links a, .mobile-links button {
+      display:flex; align-items:center; gap:8px; width:100%;
+      padding:12px 10px; border-radius:10px; text-align:left; color:var(--text); background:transparent; border:0; cursor:pointer; font-weight:700;
+    }
+    .mobile-links a:hover, .mobile-links button:hover { background: rgba(255,255,255,0.03); }
+
+    .mobile-cta { margin-top:auto; display:flex; flex-direction:column; gap:10px; }
+    .mobile-cta .btn { width:100%; justify-content:center; }
+
+    .mobile-submenu { display:none; flex-direction:column; gap:6px; padding-left:8px; margin-top:6px; }
+    .mobile-sub-toggle { display:flex; align-items:center; justify-content:space-between; gap:8px; width:100%; padding:12px 10px; border-radius:10px; background:transparent; color:var(--text); border:0; font-weight:700; cursor:pointer; }
+    .mobile-sub-toggle[aria-expanded="true"] + .mobile-submenu { display:flex; }
+
+    /* small screens: hide desktop links and show toggle */
+    @media (max-width: 1024px) {
+      .nav-links { display:none; }
+      .header-cta { display:none; }
+      .mobile-toggle { display:inline-flex; }
+    }
+
+    /* Tablet specific tweaks */
+    @media (min-width: 601px) and (max-width: 1024px) {
+      :root { --mobile-menu-width:420px; }
+      .brand img { width:44px; height:44px; }
+    }
+
+    /* Desktop: show desktop nav; hide mobile toggle (default) */
+    @media (min-width: 1025px) {
+      .mobile-toggle { display:none; }
+      .mobile-backdrop, #mobile-menu { display:none; }
+    }
+
+    /* tiny adjustments for tiny phones */
+    @media (max-width:420px){
+      #mobile-menu { width:100%; }
+    }
+
+    /* hero */
+    .hero{padding:36px 0 8px}
+    .hero-card{display:grid;grid-template-columns:1fr 320px;gap:20px;align-items:start}
+    .hero-left h2{font-family:Merriweather,serif;font-size:28px;margin:0 0 8px}
+    .hero-left p{color:var(--muted);margin:0 0 12px}
+    .hero-figure img{width:100%;height:180px;object-fit:cover;border-radius:12px}
+
+    /* content layout */
+    .main-grid{display:grid;grid-template-columns:320px 1fr;gap:28px;margin-top:22px}
+
+    /* table of contents */
+    .toc{position:sticky;top:84px;padding:18px;border-radius:12px;background:linear-gradient(180deg,var(--panel),rgba(6,36,52,0.6));border:1px solid rgba(255,255,255,0.03)}
+    .toc h3{margin:0 0 8px}
+    .toc ol{padding-left:18px;margin:0}
+    .toc li{margin:8px 0}
+    .toc a{color:var(--muted);font-weight:600}
+    .toc a.active{color:var(--accent-2)}
+
+    /* policy content */
+    .policy{padding:20px;border-radius:12px;background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);border:1px solid rgba(255,255,255,0.03)}
+    .policy h4{font-family:Merriweather,serif;margin-top:0}
+    .policy .section{margin:24px 0;padding:12px;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);border:1px solid rgba(255,255,255,0.02)}
+    .policy p{color:var(--muted);margin:8px 0}
+    .meta{font-size:13px;color:var(--muted)}
+
+    /* details toggle (collapsible) */
+    details{background:transparent;border-radius:8px;padding:8px}
+    details summary{cursor:pointer;font-weight:700;padding:6px 0}
+    details[open] summary{color:var(--accent-2)}
+
+    /* action row */
+    .actions{display:flex;gap:12px;align-items:center;margin-top:10px}
+    .btn-ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:#d8eefc;padding:8px 12px;border-radius:10px}
+
+    /* print styles */
+    @media print{
+      header, .toc, .actions, .nav-links, .cta { display:none }
+      .wrap{padding:0}
+      body{background:#fff;color:#000}
+      .policy{background:transparent;border:0}
+    }
+
+    /* responsive */
+    @media (max-width:900px){
+      .hero-card{grid-template-columns:1fr}
+      .main-grid{grid-template-columns:1fr;}
+      .toc{position:static}
+      .hero-figure img{height:220px}
+    }
+
+    /* tiny utilities */
+    .sr-only { position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden; }
+  </style>
+</head>
+<body>
+  <!-- HEADER / NAV -->
+  <header class="site-header" role="banner" aria-label="Main header">
+    <div class="nav-inner" role="navigation" aria-label="Primary navigation">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div class="brand">
+          <img src="images/logo.png" alt="DRN UK" />
+          <div style="line-height:1">
+            <h1 style="margin:0;font-size:15px">Digital Resilience Network UK</h1>
+
+          </div>
+        </div>
+      </div>
+
+      <nav class="primary" aria-label="Main menu">
+        <!-- Desktop / tablet links -->
+        <ul class="nav-links" role="menubar" aria-hidden="false">
+         <li role="none"><a href="index.html" role="menuitem">Home</a></li>
+
+          <li role="none"><a href="what-we-do.html" role="menuitem">What we do</a></li>
+
+          <li role="none"><a href="blog.html" role="menuitem">Blog</a></li>
+          <li role="none"><a href="event.html" role="menuitem">Events</a></li>
+          <li role="none"><a href="join.html" role="menuitem">Join</a></li>
+        </ul>
+
+        <!-- Desktop CTA area (visible on wide screens) -->
+        <div class="header-cta" aria-hidden="false">
+          <a class="btn-ghost" href="contact.html">Contact Us</a>
+          <a class="cta" href="join.html">Become a Member</a>
+        </div>
+
+        <!-- Mobile toggle moved to the RIGHT (after CTAs) -->
+        <button class="mobile-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
+          <span class="sr-only">Open menu</span>
+          <span class="hamburger" aria-hidden="true">
+            <span></span><span></span><span></span>
+          </span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Mobile slide-in menu + backdrop -->
+  <div class="mobile-backdrop" id="mobileBackdrop" tabindex="-1" aria-hidden="true"></div>
+
+  <aside id="mobile-menu" role="dialog" aria-label="Mobile menu" aria-hidden="true">
+    <div class="top-row">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <img src="images/logo.png" alt="" style="width:40px;height:40px;border-radius:8px;object-fit:cover;border:1px solid rgba(255,255,255,0.04)"/>
+        <div>
+          <strong style="font-size:14px">Digital Resilience Network UK</strong>
+
+        </div>
+      </div>
+      <button class="mobile-close" aria-label="Close menu">✕</button>
+    </div>
+
+    <nav aria-label="Mobile primary">
+      <div class="mobile-links" role="menu">
+      <a href="index.html" role="menuitem">Home</a>
+
+
+        <a href="what-we-do.html" role="menuitem">What we do</a>
+
+
+        <a href="blog.html" role="menuitem">Blog</a>
+        <a href="event.html" role="menuitem">Events</a>
+      
+        <a href="join.html" role="menuitem">Join</a>
+
+        <!-- Make sure Contact Us + Become Member are inside mobile menu -->
+        <a href="contact.html" role="menuitem">Contact Us</a>
+      </div>
+
+      <div class="mobile-cta">
+        <a class="cta btn" href="join.html" role="menuitem" style="text-decoration:none">Become a Member</a>
+        <a class="btn-ghost btn" href="contact.html" role="menuitem" style="text-decoration:none">Contact Us</a>
+      </div>
+    </nav>
+  </aside>
+
+  
+
+  <script>
+    (function(){
+      const mobileToggle = document.querySelector('.mobile-toggle');
+      const mobileMenu = document.getElementById('mobile-menu');
+      const mobileBackdrop = document.getElementById('mobileBackdrop');
+      const mobileClose = document.querySelector('.mobile-close');
+
+      // submenus inside mobile menu
+      document.querySelectorAll('.mobile-sub-toggle').forEach(btn=>{
+        btn.addEventListener('click', ()=>{
+          const expanded = btn.getAttribute('aria-expanded') === 'true';
+          btn.setAttribute('aria-expanded', String(!expanded));
+        });
+      });
+
+      function openMenu(){
+        mobileMenu.classList.add('open');
+        mobileBackdrop.classList.add('visible');
+        mobileMenu.setAttribute('aria-hidden', 'false');
+        mobileBackdrop.setAttribute('aria-hidden', 'false');
+        mobileToggle?.classList.add('open');
+        mobileToggle?.setAttribute('aria-expanded', 'true');
+        setTimeout(()=> {
+          const f = mobileMenu.querySelector('button, a');
+          f && f.focus();
+        }, 160);
+        document.documentElement.style.overflow = 'hidden';
+      }
+
+      function closeMenu(){
+        mobileMenu.classList.remove('open');
+        mobileBackdrop.classList.remove('visible');
+        mobileMenu.setAttribute('aria-hidden', 'true');
+        mobileBackdrop.setAttribute('aria-hidden', 'true');
+        mobileToggle?.classList.remove('open');
+        mobileToggle?.setAttribute('aria-expanded', 'false');
+        mobileToggle && mobileToggle.focus();
+        document.documentElement.style.overflow = '';
+      }
+
+      mobileToggle?.addEventListener('click', (e)=>{
+        const open = mobileMenu.classList.toggle('open');
+        mobileBackdrop.classList.toggle('visible', open);
+        mobileMenu.setAttribute('aria-hidden', String(!open));
+        mobileBackdrop.setAttribute('aria-hidden', String(!open));
+        mobileToggle.classList.toggle('open', open);
+        mobileToggle.setAttribute('aria-expanded', String(open));
+        if(open){
+          setTimeout(()=> {
+            const f = mobileMenu.querySelector('button, a');
+            f && f.focus();
+          }, 160);
+          document.documentElement.style.overflow = 'hidden';
+        } else {
+          document.documentElement.style.overflow = '';
+        }
+      });
+
+      mobileClose?.addEventListener('click', closeMenu);
+      mobileBackdrop?.addEventListener('click', closeMenu);
+
+      // close on ESC
+      document.addEventListener('keydown', (e)=>{
+        if(e.key === 'Escape' && mobileMenu.classList.contains('open')){
+          closeMenu();
+        }
+      });
+
+      // Close mobile menu if window resized to desktop (cleanup)
+      window.addEventListener('resize', ()=>{
+        if(window.innerWidth >= 1025 && mobileMenu.classList.contains('open')){
+          closeMenu();
+        }
+      });
+
+      /* Desktop menu: basic accessible open/close on click + hover */
+      document.querySelectorAll('.nav-links .has-submenu').forEach(li=>{
+        const a = li.querySelector(':scope > a');
+        const dd = li.querySelector(':scope > .dropdown');
+        let hideTimer = null;
+
+        function openNow(){
+          clearTimeout(hideTimer);
+          li.classList.add('open');
+          a && a.setAttribute('aria-expanded','true');
+        }
+        function scheduleClose(){
+          clearTimeout(hideTimer);
+          hideTimer = setTimeout(()=>{
+            li.classList.remove('open');
+            a && a.setAttribute('aria-expanded','false');
+          }, 300);
+        }
+
+        li.addEventListener('mouseenter', openNow);
+        li.addEventListener('mouseleave', scheduleClose);
+        li.addEventListener('focusin', openNow);
+        li.addEventListener('focusout', scheduleClose);
+
+        a && a.addEventListener('click', function(e){
+          const href = a.getAttribute('href') || '';
+          if(href === '#' || href.startsWith('#')){
+            e.preventDefault();
+            if(li.classList.contains('open')) scheduleClose();
+            else openNow();
+          }
+        });
+
+        dd && dd.addEventListener('mouseenter', openNow);
+        dd && dd.addEventListener('mouseleave', scheduleClose);
+      });
+
+      // close open desktop menus on outside click
+      document.addEventListener('click', (e)=>{
+        const insideAny = Array.from(document.querySelectorAll('.nav-links .has-submenu')).some(li => li.contains(e.target));
+        if(!insideAny){
+          document.querySelectorAll('.nav-links .has-submenu.open').forEach(li=>{
+            li.classList.remove('open');
+            const a = li.querySelector(':scope > a');
+            a && a.setAttribute('aria-expanded','false');
+          });
+        }
+      });
+
+    })();
+  </script>
+</body>
+</html>
+
+
+<!-- ====== STYLES (paste after your main stylesheet) ====== -->
+<style>/* ======= Stable, overlap-dropdown (paste AFTER your other CSS) ======= */
+.nav-links li { position: relative; }
+
+/* Dropdown: always in DOM, starts hidden by visibility/opacity (no display toggling) */
+.nav-links .dropdown {
+  position: absolute !important;
+  left: 0 !important;
+
+  /* overlap the parent slightly so there's never a gap when moving pointer */
+  top: calc(100% - 6px) !important;
+  margin: 0 !important;
+
+  min-width: 260px !important;
+  padding: 12px !important;
+  border-radius: 12px !important;
+
+  /* fully opaque readable background */
+  background: #0a1f44 !important;
+  background-color: #0a1f44 !important;
+
+  /* keep in DOM & transition via opacity/transform */
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transform: translateY(-6px) !important;
+
+  transition: opacity .22s cubic-bezier(.2,.9,.2,1), transform .22s cubic-bezier(.2,.9,.2,1), visibility .01s linear .22s !important;
+
+  box-shadow: 0 28px 60px rgba(2,6,12,0.9) !important;
+  border: 1px solid rgba(255,255,255,0.06) !important;
+  z-index: 99999 !important;
+}
+
+/* Visible state */
+.nav-links li.open > .dropdown,
+.nav-links li:focus-within > .dropdown {
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  transform: translateY(0) !important;
+  transition-delay: 0s !important; /* show immediately */
+}
+
+/* tiny invisible top overlap buffer (helps pointer movement) */
+.nav-links .dropdown::before {
+  content: "";
+  position: absolute;
+  top: -12px;
+  left: 0;
+  right: 0;
+  height: 12px;
+  pointer-events: none; /* doesn't block clicks; purely visual buffer */
+}
+/* ================================
+   Tablet (iPad) media queries
+   Target: 601px — 1024px
+   NOTE: intentionally does NOT change #bg-video
+   ================================ */
+@media (min-width: 601px) and (max-width: 1024px) {
+
+  /* footer adaptations (tablet) — use !important to win */
+  footer.site-foot { padding: 56px 0 92px !important; background: linear-gradient(180deg,#04102a,rgba(0,8,20,0.24)) !important; border-top: 1px solid rgba(255,255,255,0.04) !important; }
+  .foot-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 18px !important; }
+
+  /* reduce heavy shadows (perf) */
+  .card, .pub, .detail-panel { box-shadow: 0 18px 48px rgba(2,8,14,0.48); }
+}
+
+/* ================================
+   Phone (mobile) media queries
+   Target: up to 600px
+   IMPORTANT: DO NOT modify #bg-video here
+   ================================ */
+@media (max-width: 600px) {
+  
+
+  /* footer: single column and important overrides */
+  footer.site-foot { padding: 36px 0 56px !important; background: linear-gradient(180deg,#04102a,rgba(0,8,20,0.24)) !important; border-top: 1px solid rgba(255,255,255,0.04) !important; }
+  .foot-grid { grid-template-columns: 1fr !important; gap: 14px !important; }
+  .foot-grid img { width: 48px !important; height: 48px !important; }
+  footer.site-foot .muted { font-size: 14px !important; color: var(--muted) !important; }
+  footer.site-foot .foot-grid > div > h4 { font-size: 15px !important; }
+
+}
+
+/* links */
+.nav-links .dropdown a {
+  display: block !important;
+  padding: 10px 12px !important;
+  color: #fff !important;
+  text-decoration: none !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+}
+.nav-links .dropdown a:hover,
+.nav-links .dropdown a:focus {
+  background: rgba(255,255,255,0.04) !important;
+}
+
+/* Safety override in case parent sets blend/mix-blend-mode */
+.site-header, .site-header * {
+  opacity: 1 !important;
+  mix-blend-mode: normal !important;
+}
+
+</style><script>
+(function(){
+  const items = document.querySelectorAll('.nav-links .has-submenu');
+  if(!items || items.length === 0) return;
+
+  items.forEach(li => {
+    let hideTimer = null;
+    const anchor = li.querySelector(':scope > a');
+    const dd = li.querySelector(':scope > .dropdown');
+
+    // safety: ensure aria states present
+    if(anchor && !anchor.hasAttribute('aria-expanded')) anchor.setAttribute('aria-expanded','false');
+
+    function openNow(){
+      clearTimeout(hideTimer);
+      li.classList.add('open');
+      if(anchor) anchor.setAttribute('aria-expanded','true');
+    }
+
+    function scheduleClose(){
+      clearTimeout(hideTimer);
+      hideTimer = setTimeout(() => {
+        li.classList.remove('open');
+        if(anchor) anchor.setAttribute('aria-expanded','false');
+      }, 300); // longer debounce to avoid flicker (300ms)
+    }
+
+    // mouse events on li
+    li.addEventListener('mouseenter', openNow);
+    li.addEventListener('mouseleave', scheduleClose);
+
+    // support keyboard focus
+    li.addEventListener('focusin', openNow);
+    li.addEventListener('focusout', scheduleClose);
+
+    // also listen on the dropdown itself (if it exists)
+    if(dd){
+      dd.addEventListener('mouseenter', openNow);
+      dd.addEventListener('mouseleave', scheduleClose);
+    }
+
+    // if anchor is clicked (desktop), toggle open for keyboard users
+    if(anchor){
+      anchor.addEventListener('click', function(e){
+        // If user clicked a real hash link (like #about) allow normal jump.
+        // Otherwise for anchors that open menu, prevent default and toggle
+        const href = anchor.getAttribute('href') || '';
+        if(href.startsWith('#') || href === '' || href === '#'){
+          e.preventDefault();
+          if(li.classList.contains('open')) {
+            li.classList.remove('open');
+            anchor.setAttribute('aria-expanded','false');
+          } else {
+            openNow();
+          }
+        }
+      });
+    }
+  });
+
+  // Close open menus on Escape or outside click
+  document.addEventListener('keydown', (e) => {
+    if(e.key === 'Escape' || e.key === 'Esc'){
+      document.querySelectorAll('.nav-links .has-submenu.open').forEach(li => {
+        li.classList.remove('open');
+        const a = li.querySelector(':scope > a');
+        if(a) a.setAttribute('aria-expanded','false');
+      });
+    }
+  });
+
+  document.addEventListener('click', function(e){
+    // if click is inside any .has-submenu, do nothing
+    const anyContainer = Array.from(document.querySelectorAll('.nav-links .has-submenu'));
+    let clickedInside = false;
+    anyContainer.forEach(li => {
+      if(li.contains(e.target)) clickedInside = true;
+    });
+    if(!clickedInside){
+      document.querySelectorAll('.nav-links .has-submenu.open').forEach(li => {
+        li.classList.remove('open');
+        const a = li.querySelector(':scope > a');
+        if(a) a.setAttribute('aria-expanded','false');
+      });
+    }
+  });
+
+})();
+</script>
+
+  <main class="wrap">
+
+    <section class="hero">
+      <div class="hero-card">
+        <div class="hero-left">
+          <h2>Privacy Policy — Digital Resilience Network UK (DRN UK)</h2>
+          <p class="meta">This page explains what personal data we collect, why we collect it and how we use and protect it. Last revised: <strong>1 March 2026</strong>.</p>
+
+          <div class="actions">
+            <button class="cta" id="downloadPdf">Download / Print</button>
+            <button class="btn-ghost" id="acceptBtn">I understand</button>
+            <span id="acceptedNote" class="meta" style="display:none;color:var(--accent);">You have acknowledged this policy.</span>
+          </div>
+        </div>
+
+       
+      </div>
+    </section>
+
+    <div class="main-grid">
+      <nav class="toc" aria-label="Table of contents">
+        <h3>On this page</h3>
+        <ol id="tocList">
+          <li><a href="#introduction">1. Introduction</a></li>
+          <li><a href="#who">2. Who We Are</a></li>
+          <li><a href="#collect">3. What Information We Collect</a></li>
+          <li><a href="#use">4. How We Use Your Information</a></li>
+          <li><a href="#lawful">5. Lawful Basis for Processing</a></li>
+          <li><a href="#sharing">6. Data Sharing</a></li>
+          <li><a href="#transfers">7. International Transfers</a></li>
+          <li><a href="#retention">8. Data Retention</a></li>
+          <li><a href="#rights">9. Your Rights</a></li>
+          <li><a href="#security">10. Security</a></li>
+          <li><a href="#cookies">11. Cookies</a></li>
+          <li><a href="#changes">12. Changes to This Policy</a></li>
+          <li><a href="#contact">13. Contact Us</a></li>
+        </ol>
+      </nav>
+
+      <article class="policy" id="policyContent">
+
+        <section id="introduction" class="section">
+          <h4>1. Introduction</h4>
+          <p>Digital Resilience Network UK (DRN UK) is committed to protecting and respecting your privacy. This Privacy Policy explains how we collect, use, store, and protect personal data when you visit our website, sign up for updates, apply for membership, participate in events, or otherwise engage with DRN UK.</p>
+          <p>We process personal data in accordance with the UK General Data Protection Regulation (UK GDPR) and the Data Protection Act 2018.</p>
+        </section>
+
+        <section id="who" class="section">
+          <h4>2. Who We Are</h4>
+          <p>Digital Resilience Network UK (DRN UK) is an independent network focused on advancing digital resilience across the United Kingdom. For the purposes of UK data protection law, DRN UK is the “data controller” of personal data collected through this website.</p>
+          <details>
+            <summary>Data controller contact</summary>
+            <p class="meta">If you have any questions about this policy, you can contact us at: <a href="mailto:info@digitalresiliencenetworkuk.org">info@digitalresiliencenetworkuk.org</a></p>
+          </details>
+        </section>
+
+        <section id="collect" class="section">
+          <h4>3. What Information We Collect</h4>
+          <p>We may collect and process the following types of personal data:</p>
+          <details>
+            <summary>Information you provide directly</summary>
+            <ul>
+              <li>Name</li>
+              <li>Email address</li>
+              <li>Professional role and/or organisation</li>
+              <li>Contact details</li>
+              <li>Membership or contribution information</li>
+              <li>Event registration details</li>
+              <li>Correspondence you send to us</li>
+            </ul>
+          </details>
+
+          <details>
+            <summary>Information collected automatically</summary>
+            <ul>
+              <li>IP address</li>
+              <li>Browser type and version</li>
+              <li>Pages visited and time spent</li>
+              <li>Referring website</li>
+              <li>Device information</li>
+            </ul>
+            <p class="meta">This information may be collected using cookies or analytics tools (see section 11).</p>
+          </details>
+        </section>
+
+        <section id="use" class="section">
+          <h4>4. How We Use Your Information</h4>
+          <p>We use personal data to:</p>
+          <ul>
+            <li>Respond to enquiries</li>
+            <li>Manage memberships and community participation</li>
+            <li>Send newsletters or updates (where you have opted in)</li>
+            <li>Organise and administer events</li>
+            <li>Publish articles or member contributions (with consent)</li>
+            <li>Improve our website and communications</li>
+            <li>Comply with legal obligations</li>
+          </ul>
+          <p class="meta">We do not sell or trade personal data.</p>
+        </section>
+
+        <section id="lawful" class="section">
+          <h4>5. Lawful Basis for Processing</h4>
+          <p>Under UK GDPR, we rely on the following lawful bases:</p>
+          <ul>
+            <li><strong>Consent</strong> – for newsletters and marketing communications</li>
+            <li><strong>Legitimate Interests</strong> – to manage our network, events, and research activities</li>
+            <li><strong>Contractual Necessity</strong> – where membership or partnership arrangements apply</li>
+            <li><strong>Legal Obligation</strong> – where required by law</li>
+          </ul>
+          <p class="meta">You may withdraw consent for communications at any time by contacting us or using the unsubscribe options in emails.</p>
+        </section>
+
+        <section id="sharing" class="section">
+          <h4>6. Data Sharing</h4>
+          <p>We do not share personal data with third parties except where necessary for the purposes set out in this policy, for example:</p>
+          <ul>
+            <li>Service providers who support our website, hosting, email distribution, or event management</li>
+            <li>Where required by law</li>
+            <li>With your explicit consent</li>
+          </ul>
+          <p class="meta">Where third-party service providers process data on our behalf, we ensure appropriate safeguards are in place (e.g., data processing agreements, adequate protections).</p>
+        </section>
+
+        <section id="transfers" class="section">
+          <h4>7. International Transfers</h4>
+          <p>Where our service providers operate outside the UK, we ensure that appropriate safeguards are implemented in accordance with UK GDPR requirements (for example standard contractual clauses or other approved transfer mechanisms).</p>
+        </section>
+
+        <section id="retention" class="section">
+          <h4>8. Data Retention</h4>
+          <p>We retain personal data only for as long as necessary to fulfil the purposes outlined in this policy, including:</p>
+          <ul>
+            <li>Membership and engagement records</li>
+            <li>Event participation records</li>
+            <li>Legal or regulatory obligations</li>
+          </ul>
+          <p class="meta">We periodically review stored data to ensure it remains necessary and proportionate.</p>
+        </section>
+
+        <section id="rights" class="section">
+          <h4>9. Your Rights</h4>
+          <p>Under UK GDPR, you have the right to:</p>
+          <ul>
+            <li>Access your personal data</li>
+            <li>Request correction of inaccurate data</li>
+            <li>Request erasure ("right to be forgotten")</li>
+            <li>Restrict processing</li>
+            <li>Object to processing</li>
+            <li>Withdraw consent (where applicable)</li>
+            <li>Lodge a complaint with the Information Commissioner’s Office (ICO)</li>
+          </ul>
+          <p class="meta">To exercise your rights, please contact: <a href="mailto:info@digitalresiliencenetworkuk.org">info@digitalresiliencenetworkuk.org</a></p>
+          <p class="meta">You may also contact the ICO at: <a href="https://www.ico.org.uk" target="_blank" rel="noopener">https://www.ico.org.uk</a></p>
+        </section>
+
+        <section id="security" class="section">
+          <h4>10. Security</h4>
+          <p>We take appropriate technical and organisational measures to protect personal data against unauthorised access, alteration, disclosure, or destruction. This includes encrypted data transmission (HTTPS), secure hosting, and access controls for staff who handle personal data.</p>
+        </section>
+
+        <section id="cookies" class="section">
+          <h4>11. Cookies</h4>
+          <p>Our website may use cookies to:</p>
+          <ul>
+            <li>Improve user experience</li>
+            <li>Analyse website traffic</li>
+            <li>Enable essential functionality</li>
+          </ul>
+          <p class="meta">You may control cookies through your browser settings. A separate Cookie Policy may provide further detail.</p>
+        </section>
+
+        <section id="changes" class="section">
+          <h4>12. Changes to This Policy</h4>
+          <p>We may update this Privacy Policy from time to time. Any changes will be posted on this page with an updated revision date. We encourage users to check this page periodically.</p>
+        </section>
+
+        <section id="contact" class="section">
+          <h4>13. Contact Us</h4>
+          <p>If you have any questions about this Privacy Policy or how we handle personal data, please contact:</p>
+          <p class="meta">Digital Resilience Network UK (DRN UK)<br>Email: <a href="mailto:info@digitalresiliencenetworkuk.org">info@digitalresiliencenetworkuk.org</a></p>
+        </section>
+
+      </article>
+    </div>
+
+  </main>
+
+
+  <script>
+    // Smooth scroll for TOC links
+    document.querySelectorAll('.toc a').forEach(a=>{
+      a.addEventListener('click', e=>{
+        e.preventDefault();
+        document.querySelectorAll('.toc a').forEach(x=>x.classList.remove('active'));
+        a.classList.add('active');
+        const id = a.getAttribute('href');
+        document.querySelector(id).scrollIntoView({behavior:'smooth',block:'start'});
+      });
+    });
+
+    // Download / print button
+    document.getElementById('downloadPdf').addEventListener('click', ()=>{
+      // instructs user to use print -> Save as PDF
+      window.print();
+    });
+
+    // Accept button (store ack in localStorage)
+    const acceptBtn = document.getElementById('acceptBtn');
+    const acceptedNote = document.getElementById('acceptedNote');
+    const ack = localStorage.getItem('drn_privacy_ack');
+    if(ack === '1'){ acceptedNote.style.display='inline'; acceptBtn.style.display='none'; }
+    acceptBtn.addEventListener('click', ()=>{ localStorage.setItem('drn_privacy_ack','1'); acceptedNote.style.display='inline'; acceptBtn.style.display='none'; });
+
+    // Scrollspy: highlight active section in TOC based on viewport
+    const sections = document.querySelectorAll('article .section');
+    const tocLinks = document.querySelectorAll('.toc a');
+    const io = new IntersectionObserver(entries=>{
+      entries.forEach(ent=>{
+        if(ent.isIntersecting){
+          const id = '#' + ent.target.id;
+          tocLinks.forEach(link=>{ if(link.getAttribute('href')===id){ link.classList.add('active') } else { link.classList.remove('active') } });
+        }
+      });
+    },{threshold:0.35});
+    sections.forEach(s=>io.observe(s));
+
+    // Expand all details when printing so print includes content
+    window.addEventListener('beforeprint', ()=>{ document.querySelectorAll('details').forEach(d=>d.open=true); });
+    window.addEventListener('afterprint', ()=>{ document.querySelectorAll('details').forEach(d=>d.open=false); });
+
+  </script>
+
+  <footer class="site-foot">
+    <div class="wrap">
+      <div class="foot-grid">
+        <div>
+          <div style="display:flex;gap:12px;align-items:center">
+            <img src="images/logo.png" alt="DRN mark" style="width:56px;height:56px;border-radius:8px;object-fit:cover;border:1px solid rgba(255,255,255,0.06)"/>
+            <div>
+              <strong>Digital Resilience Network UK</strong>
+            
+            </div>
+          </div>
+          <p class="muted" style="margin-top:12px;max-width:320px">DRN UK convenes practitioners, policymakers and community partners to design practical ways to keep public and private services running during digital disruption.</p>
+        </div>
+
+        <div>
+          <h4>Quick Links</h4>
+          <ul style="padding-left:18px;margin:8px 0">
+            <li><a href="index.html#about">About Us</a></li>
+            <li><a href="what-we-do.html#research">Research</a></li>
+            <li><a href="blog.html">Blog</a></li>
+            <li><a href="join.html">Membership</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4>Resources</h4>
+          <ul style="padding-left:18px;margin:8px 0">
+            <li><a href="#toolkits">Toolkits</a></li>
+            <li><a href="#reading">Recommended reading</a></li>
+            <li><a href="#events">Events</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4>Contact</h4>
+        
+          <div style="margin-top:8px"><strong>Email</strong><div class="muted"><a href="mailto:info@digitalresiliencenetworkuk.org">info@digitalresiliencenetworkuk.org</a></div></div>
+          <div style="margin-top:8px"><strong>Phone</strong><div class="muted"><a href="tel:+447769380286">+44 7769 380286</a></div></div>
+          <div class="muted" style="margin-top:8px">Follow us</div>
+          <div style="margin-top:8px;display:flex;gap:8px">
+            <a href="#" class="btn-ghost" aria-label="X (Twitter)"><img src="https://img.icons8.com/ios-filled/24/ffffff/twitter.png" alt="X"/></a>
+            <a href="#" class="btn-ghost" aria-label="LinkedIn"><img src="https://img.icons8.com/ios-filled/24/ffffff/linkedin.png" alt="LinkedIn"/></a>
+            <a href="#" class="btn-ghost" aria-label="YouTube"><img src="https://img.icons8.com/ios-filled/24/ffffff/youtube-play.png" alt="YouTube"/></a>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-top:18px">
+        <div class="legal">© 2026 Digital Resilience Network UK. All rights reserved.</div>
+        <div style="display:flex;gap:12px;align-items:center">
+  <a href="policies.html#legal">Legal</a>
+  <a href="policies.html#privacy">Privacy Policy</a>
+  <a href="policies.html#cookies">Cookie Policy</a>
+  <a href="policies.html#terms">Terms of Use</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <!-- ===== SCRIPTS: nav behaviour, mobile menu, subscribe demo ===== -->
+  <script>
+    // Dropdown hover/focus handling (keeps behaviour similar to your prior code)
+    (function(){
+      const items = document.querySelectorAll('.nav-links .has-submenu');
+      if(!items) return;
+      items.forEach(li=>{
+        const a = li.querySelector(':scope > a');
+        if(a && !a.hasAttribute('aria-expanded')) a.setAttribute('aria-expanded','false');
+        let timer = null;
+        function openNow(){ clearTimeout(timer); li.classList.add('open'); if(a) a.setAttribute('aria-expanded','true'); }
+        function scheduleClose(){ clearTimeout(timer); timer = setTimeout(()=>{ li.classList.remove('open'); if(a) a.setAttribute('aria-expanded','false'); }, 250); }
+        li.addEventListener('mouseenter', openNow);
+        li.addEventListener('mouseleave', scheduleClose);
+        li.addEventListener('focusin', openNow);
+        li.addEventListener('focusout', scheduleClose);
+        if(a){
+          a.addEventListener('click', (e)=>{
+            const href = a.getAttribute('href') || '';
+            if(href.startsWith('#') || href === '' || href === '#'){ e.preventDefault(); if(li.classList.contains('open')){ li.classList.remove('open'); a.setAttribute('aria-expanded','false'); } else openNow(); }
+          });
+        }
+      });
+
+      // close on Escape / outside click
+      document.addEventListener('keydown', (ev)=>{ if(ev.key === 'Escape'){ document.querySelectorAll('.nav-links .has-submenu.open').forEach(li=>{ li.classList.remove('open'); const a=li.querySelector(':scope> a'); if(a) a.setAttribute('aria-expanded','false'); }); }});
+      document.addEventListener('click', (ev)=>{ const containers = Array.from(document.querySelectorAll('.nav-links .has-submenu')); let inside=false; containers.forEach(li=>{ if(li.contains(ev.target)) inside=true; }); if(!inside) document.querySelectorAll('.nav-links .has-submenu.open').forEach(li=>{ li.classList.remove('open'); const a=li.querySelector(':scope> a'); if(a) a.setAttribute('aria-expanded','false'); }); });
+    })();
+
+    // Mobile menu toggle
+    const mobileToggle = document.querySelector('.mobile-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const mobileClose = document.getElementById('mobile-close');
+    mobileToggle?.addEventListener('click', ()=> {
+      if(!mobileMenu) return;
+      const open = mobileMenu.style.display === 'block';
+      if(open){ mobileMenu.style.transform='translateX(110%)'; setTimeout(()=> mobileMenu.style.display='none',260); mobileToggle.setAttribute('aria-expanded','false'); mobileMenu.setAttribute('aria-hidden','true'); }
+      else{ mobileMenu.style.display='block'; setTimeout(()=> mobileMenu.style.transform='translateX(0)',20); mobileToggle.setAttribute('aria-expanded','true'); mobileMenu.setAttribute('aria-hidden','false'); }
+    });
+    mobileClose?.addEventListener('click', ()=>{ if(!mobileMenu) return; mobileMenu.style.transform='translateX(110%)'; setTimeout(()=> mobileMenu.style.display='none',260); mobileMenu.setAttribute('aria-hidden','true'); });
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(a=>{
+      a.addEventListener('click', (e)=>{
+        const href = a.getAttribute('href');
+        if(!href || href === '#') return;
+        const target = document.querySelector(href);
+        if(target){
+          e.preventDefault();
+          const top = Math.max(target.getBoundingClientRect().top + window.scrollY - 84, 0);
+          window.scrollTo({ top, behavior:'smooth' });
+          // close mobile menu if open
+          if(mobileMenu && mobileMenu.style.display === 'block'){ mobileMenu.style.transform='translateX(110%)'; setTimeout(()=> mobileMenu.style.display='none',260); mobileMenu.setAttribute('aria-hidden','true'); }
+        }
+      });
+    });
+
+    // Subscribe demo (no backend)
+    document.getElementById('subscribeForm')?.addEventListener('submit', (ev)=>{
+      ev.preventDefault();
+      alert('Thanks — you are subscribed to DRN UK updates (demo).');
+      ev.target.reset();
+    });
+
+    // inline subscribe button behaviour
+    document.getElementById('inlineSubscribe')?.addEventListener('click', ()=>{ alert('To subscribe, enter your email in the Subscribe box.'); document.querySelector('#subscribeForm input[type=email]')?.focus(); });
+
+    // basic accessibility: close mobile menu on Escape
+    document.addEventListener('keydown', (ev)=>{ if(ev.key === 'Escape'){ if(mobileMenu && mobileMenu.style.display === 'block'){ mobileMenu.style.transform='translateX(110%)'; setTimeout(()=> mobileMenu.style.display='none',260); mobileMenu.setAttribute('aria-hidden','true'); } } });
+
+    /* ========== ENHANCEMENTS: stagger reveal + background parallax ========== */
+    (function(){
+      // staggered reveal
+      const els = Array.from(document.querySelectorAll('.intro-card, .feature, .aside-card'));
+      els.forEach((el, i)=> setTimeout(()=> el.classList.add('reveal'), 80 * i));
+
+      // subtle parallax for background video on desktop
+      const vid = document.getElementById('bg-video');
+      if(vid && window.innerWidth > 800){
+        const idleScale = 1.03; vid.style.transform = `scale(${idleScale})`;
+        let last = 0;
+        window.addEventListener('mousemove', (e)=>{
+          const now = Date.now(); if(now - last < 20) return; last = now;
+          const x = (e.clientX / window.innerWidth - 0.5) * 0.01;
+          const y = (e.clientY / window.innerHeight - 0.5) * 0.01;
+          vid.style.transform = `scale(${idleScale}) translate(${x * 140}px, ${y * 60}px)`;
+        });
+        window.addEventListener('mouseleave', ()=> vid.style.transform = `scale(${idleScale}) translate(0,0)`);
+      }
+    })();
+  </script>
+
+<style id="drn-theme-v3">
+/* =====================================================================
+   DRN UK — Theme v3 · TWO-TONE over the video
+   hero = translucent navy · sections = translucent ice-white · footer = translucent navy
+   Tweak the whole look from these variables only:
+   ===================================================================== */
+:root{
+  --navy:12,59,62;        /* hero, header, footer colour (RGB)            */
+  --navy-deep:5,34,38;    /* footer bottom / dropdown colour (RGB)        */
+  --navy-a:.72;           /* hero opacity   (lower = more video visible)  */
+  --paper:234,241,235;    /* section colour: warm ivory (RGB)         */
+  --paper-a:.82;          /* section opacity (lower = more video visible) */
+  --ink:#0f2f30;          /* text on light sections                       */
+  --ink-soft:#4a6164;     /* secondary text on light sections             */
+  --link:#0f5a5c;
+  --teal:#a8741a; --blue:#17575a;
+  --bg:#0c3b3e; --muted:#b8d0cb; --text:#eaf3ff;
+}
+html{ overflow-x:clip; }
+html body{ background:#0c3b3e !important; overflow-x:clip; }
+
+/* video: full strength, no global tint — colour comes only from the three bands */
+html body #bg-video{ opacity:1 !important; filter:none !important; z-index:-4 !important; }
+html body #bg-overlay, html body::before, html body::after{ display:none !important; }
+
+/* ---------- HEADER (navy) ---------- */
+html body header.site-header{
+  background:linear-gradient(180deg, rgba(var(--navy),.88), rgba(var(--navy),.78)) !important;
+  border-bottom:1px solid rgba(255,255,255,.16) !important; box-shadow:0 6px 24px rgba(3,12,32,.25) !important;
+  -webkit-backdrop-filter:blur(10px) saturate(120%) !important; backdrop-filter:blur(10px) saturate(120%) !important;
+}
+html body header.site-header, html body header.site-header a, html body header.site-header .brand h1{ color:#f2f7ff !important; }
+html body .nav-links .dropdown, html body .dropdown{
+  background:rgba(var(--navy-deep),.97) !important; border:1px solid rgba(255,255,255,.18) !important;
+  box-shadow:0 24px 56px rgba(2,10,30,.55) !important;
+}
+html body .nav-links .dropdown a, html body .dropdown a{ color:#eaf3ff !important; }
+html body .nav-links .dropdown a:hover, html body .nav-links .dropdown a:focus,
+html body .nav-links > li:hover > a, html body .mobile-links a:hover, html body .mobile-links button:hover{ background:rgba(255,255,255,.12) !important; }
+html body #mobile-menu{ background:linear-gradient(180deg, rgba(var(--navy-deep),.99), rgba(var(--navy),.99)) !important; border-left:1px solid rgba(255,255,255,.16) !important; }
+html body #mobile-menu, html body #mobile-menu a, html body #mobile-menu button{ color:#eaf3ff !important; }
+
+/* ---------- HERO BAND (navy, full-bleed) ---------- */
+html body main.wrap{ padding-top:0 !important; padding-bottom:0 !important; margin-top:0 !important; margin-bottom:0 !important; }
+html body main > :is(.hero,.page-hero,.page-banner):not(.band-light){ position:relative !important; z-index:0 !important; margin-top:0 !important; margin-bottom:0 !important; color:#f2f7ff; }
+html body main.wrap > :is(.hero,.page-hero,.page-banner):not(.band-light){ padding-top:44px !important; padding-bottom:52px !important; }
+html body main > :is(.hero,.page-hero,.page-banner):not(.band-light) :is(h1,h2,h3,h4,h5,h6,p,li,label,small,strong,em,span,div,dt,dd,td,th,legend,figcaption,time,blockquote,summary,cite,address,b,i){ color:#f2f7ff; }
+html body main > :is(.hero,.page-hero,.page-banner):not(.band-light) :is(.muted,.muted-small,.meta,.meta-small,.lead,.sub,.excerpt,.event-meta,.note,small,.founder-role,.hint){ color:#cfe1dc !important; }
+html body main > :is(.hero,.page-hero,.page-banner):not(.band-light) h1,
+html body main > :is(.hero,.page-hero,.page-banner):not(.band-light) .headline,
+html body main > :is(.hero,.page-hero,.page-banner):not(.band-light) h2{ color:#fff !important; text-shadow:0 2px 16px rgba(2,10,30,.45); }
+html body main > :is(.hero,.page-hero,.page-banner):not(.band-light) .cta,
+html body main > :is(.hero,.page-hero,.page-banner):not(.band-light) .btn-primary{ background:linear-gradient(90deg,#f6c453,#e39a2d) !important; color:#1a1405 !important; }
+html body main > :is(.hero,.page-hero,.page-banner):not(.band-light) .cta *{ color:#1a1405 !important; }
+html body main > :is(.hero,.page-hero,.page-banner):not(.band-light) .btn-ghost,
+html body main > :is(.hero,.page-hero,.page-banner):not(.band-light) .ghost{ background:rgba(255,255,255,.10) !important; border:1px solid rgba(255,255,255,.32) !important; color:#f2f7ff !important; }
+html body main > :is(.hero,.page-hero,.page-banner):not(.band-light) .card,
+html body main > :is(.hero,.page-hero,.page-banner):not(.band-light) .announce,
+html body main > :is(.hero,.page-hero,.page-banner):not(.band-light) .resource-card,
+html body main > :is(.hero,.page-hero,.page-banner):not(.band-light) .join-aside,
+html body main > :is(.hero,.page-hero,.page-banner):not(.band-light) .pub,
+html body main > :is(.hero,.page-hero,.page-banner):not(.band-light) .announce-card,
+html body main > :is(.hero,.page-hero,.page-banner):not(.band-light) .logos,
+html body main > :is(.hero,.page-hero,.page-banner):not(.band-light) .partners-viewport,
+html body main > :is(.hero,.page-hero,.page-banner):not(.band-light) .partner-badge,
+html body main > :is(.hero,.page-hero,.page-banner):not(.band-light) .tier,
+html body main > :is(.hero,.page-hero,.page-banner):not(.band-light) .partner-card,
+html body main > :is(.hero,.page-hero,.page-banner):not(.band-light) .role,
+html body main > :is(.hero,.page-hero,.page-banner):not(.band-light) .side-card,
+html body main > :is(.hero,.page-hero,.page-banner):not(.band-light) .feature,
+html body main > :is(.hero,.page-hero,.page-banner):not(.band-light) .intro-card,
+html body main > :is(.hero,.page-hero,.page-banner):not(.band-light) .aside-card,
+html body main > :is(.hero,.page-hero,.page-banner):not(.band-light) .get-involved,
+html body main > :is(.hero,.page-hero,.page-banner):not(.band-light) .leader,
+html body main > :is(.hero,.page-hero,.page-banner):not(.band-light) .mission,
+html body main > :is(.hero,.page-hero,.page-banner):not(.band-light) .value,
+html body main > :is(.hero,.page-hero,.page-banner):not(.band-light) .detail-panel,
+html body main > :is(.hero,.page-hero,.page-banner):not(.band-light) .s-card,
+html body main > :is(.hero,.page-hero,.page-banner):not(.band-light) .notice,
+html body main > :is(.hero,.page-hero,.page-banner):not(.band-light) .topic,
+html body main > :is(.hero,.page-hero,.page-banner):not(.band-light) .event-card,
+html body main > :is(.hero,.page-hero,.page-banner):not(.band-light) .what,
+html body main > :is(.hero,.page-hero,.page-banner):not(.band-light) .article-card,
+html body main > :is(.hero,.page-hero,.page-banner):not(.band-light) .post,
+html body main > :is(.hero,.page-hero,.page-banner):not(.band-light) .subscribe,
+html body main > :is(.hero,.page-hero,.page-banner):not(.band-light) .carousel,
+html body main > :is(.hero,.page-hero,.page-banner):not(.band-light) .policy,
+html body main > :is(.hero,.page-hero,.page-banner):not(.band-light) .contact-item,
+html body main > :is(.hero,.page-hero,.page-banner):not(.band-light) .author,
+html body main > :is(.hero,.page-hero,.page-banner):not(.band-light) .featured-card,
+html body main > :is(.hero,.page-hero,.page-banner):not(.band-light) .empty-state,
+html body main > :is(.hero,.page-hero,.page-banner):not(.band-light) .combined-card,
+html body main > :is(.hero,.page-hero,.page-banner):not(.band-light) .toc,
+html body main > :is(.hero,.page-hero,.page-banner):not(.band-light) .check-item,
+html body main > :is(.hero,.page-hero,.page-banner):not(.band-light) .founders-item,
+html body main > :is(.hero,.page-hero,.page-banner):not(.band-light) .modal-card{
+  background:linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.06)) !important;
+  border:1px solid rgba(255,255,255,.20) !important; border-image:none !important;
+  box-shadow:0 14px 40px rgba(2,10,32,.30) !important;
+  -webkit-backdrop-filter:blur(8px) !important; backdrop-filter:blur(8px) !important;
+}
+html body main > :is(.hero,.page-hero,.page-banner):not(.band-light) input,
+html body main > :is(.hero,.page-hero,.page-banner):not(.band-light) textarea,
+html body main > :is(.hero,.page-hero,.page-banner):not(.band-light) select{ background:rgba(255,255,255,.10) !important; border:1px solid rgba(255,255,255,.30) !important; color:#f2f7ff !important; }
+html body main > :is(.hero,.page-hero,.page-banner):not(.band-light) input::placeholder,
+html body main > :is(.hero,.page-hero,.page-banner):not(.band-light) textarea::placeholder{ color:rgba(220,232,250,.65) !important; }
+
+/* ---------- SECTIONS BAND (ice-white, full-bleed) ---------- */
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script),
+html body main > .hero.band-light{
+  position:relative !important; z-index:0 !important; margin-top:0 !important; margin-bottom:0 !important;
+  --muted:var(--ink-soft); --text:var(--ink); --accent:var(--teal); --accent-2:var(--blue);
+  color:var(--ink) !important;
+}
+html body main{ position:relative !important; z-index:0 !important; --hero-h:520px; }
+html body main::before{
+  content:"" !important; position:absolute !important; z-index:-1 !important; top:0; bottom:0; left:50%; width:100vw; transform:translateX(-50%); pointer-events:none;
+  background:linear-gradient(180deg,
+     rgba(var(--navy),.80) 0,
+     rgba(var(--navy),.72) calc(var(--hero-h) - 70px),
+     rgba(70,118,114,.70) calc(var(--hero-h) - 10px),
+     rgba(var(--paper),.80) calc(var(--hero-h) + 50px),
+     rgba(var(--paper),var(--paper-a)) 100%) !important;
+  -webkit-backdrop-filter:blur(3px); backdrop-filter:blur(3px);
+}
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) :is(h1,h2,h3,h4,h5,h6,p,li,label,small,strong,em,span,div,dt,dd,td,th,legend,figcaption,time,blockquote,summary,cite,address,b,i),
+html body main > .hero.band-light :is(h1,h2,h3,h4,h5,h6,p,li,label,small,strong,em,span,div,dt,dd,td,th,legend,figcaption,time,blockquote,summary,cite,address,b,i){ color:var(--ink) !important; text-shadow:none !important; }
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) :is(.muted,.muted-small,.meta,.meta-small,.lead,.sub,.excerpt,.event-meta,.note,small,.founder-role,.hint),
+html body main > .hero.band-light :is(.muted,.muted-small,.meta,.meta-small,.lead,.sub,.excerpt,.event-meta,.note,small,.founder-role,.hint){ color:var(--ink-soft) !important; }
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) :is(p,li,.muted) a,
+html body main > .hero.band-light :is(p,li,.muted) a{ color:var(--link) !important; }
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) :is(h1,h2,h3,h4,.section-title),
+html body main > .hero.band-light :is(h1,h2,h3,h4,.section-title){ text-shadow:none !important; }
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .cta,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .btn,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .btn-primary,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .cta-small,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) button[type=submit],
+html body main > .hero.band-light .cta,
+html body main > .hero.band-light .btn,
+html body main > .hero.band-light .btn-primary,
+html body main > .hero.band-light .cta-small,
+html body main > .hero.band-light button[type=submit]{
+  background:linear-gradient(90deg,#0c3b3e,#17575a) !important; color:#fff !important; border:0 !important;
+  box-shadow:0 8px 22px rgba(12,59,62,.28) !important;
+}
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .cta *,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .btn *,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .btn-primary *,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .cta-small *,
+html body main > .hero.band-light .cta *,
+html body main > .hero.band-light .btn *,
+html body main > .hero.band-light .btn-primary *,
+html body main > .hero.band-light .cta-small *{ color:#fff !important; }
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .btn-ghost,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .ghost,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .btn-ghost1,
+html body main > .hero.band-light .btn-ghost,
+html body main > .hero.band-light .ghost,
+html body main > .hero.band-light .btn-ghost1{
+  background:rgba(255,255,255,.65) !important; border:1px solid rgba(12,59,62,.28) !important; color:var(--ink) !important;
+  box-shadow:0 4px 14px rgba(10,30,70,.08) !important;
+}
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .btn-ghost *,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .ghost *,
+html body main > .hero.band-light .btn-ghost *,
+html body main > .hero.band-light .ghost *{ color:var(--ink) !important; }
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .card,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .announce,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .resource-card,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .join-aside,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .pub,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .announce-card,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .logos,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .partners-viewport,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .partner-badge,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .tier,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .partner-card,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .role,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .side-card,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .feature,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .intro-card,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .aside-card,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .get-involved,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .leader,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .mission,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .value,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .detail-panel,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .s-card,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .notice,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .topic,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .event-card,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .what,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .article-card,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .post,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .subscribe,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .carousel,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .policy,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .contact-item,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .author,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .featured-card,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .empty-state,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .combined-card,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .toc,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .check-item,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .founders-item,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .modal-card,
+html body main > .hero.band-light .card,
+html body main > .hero.band-light .announce,
+html body main > .hero.band-light .resource-card,
+html body main > .hero.band-light .join-aside,
+html body main > .hero.band-light .pub,
+html body main > .hero.band-light .announce-card,
+html body main > .hero.band-light .logos,
+html body main > .hero.band-light .partners-viewport,
+html body main > .hero.band-light .partner-badge,
+html body main > .hero.band-light .tier,
+html body main > .hero.band-light .partner-card,
+html body main > .hero.band-light .role,
+html body main > .hero.band-light .side-card,
+html body main > .hero.band-light .feature,
+html body main > .hero.band-light .intro-card,
+html body main > .hero.band-light .aside-card,
+html body main > .hero.band-light .get-involved,
+html body main > .hero.band-light .leader,
+html body main > .hero.band-light .mission,
+html body main > .hero.band-light .value,
+html body main > .hero.band-light .detail-panel,
+html body main > .hero.band-light .s-card,
+html body main > .hero.band-light .notice,
+html body main > .hero.band-light .topic,
+html body main > .hero.band-light .event-card,
+html body main > .hero.band-light .what,
+html body main > .hero.band-light .article-card,
+html body main > .hero.band-light .post,
+html body main > .hero.band-light .subscribe,
+html body main > .hero.band-light .carousel,
+html body main > .hero.band-light .policy,
+html body main > .hero.band-light .contact-item,
+html body main > .hero.band-light .author,
+html body main > .hero.band-light .featured-card,
+html body main > .hero.band-light .empty-state,
+html body main > .hero.band-light .combined-card,
+html body main > .hero.band-light .toc,
+html body main > .hero.band-light .check-item,
+html body main > .hero.band-light .founders-item,
+html body main > .hero.band-light .modal-card{
+  background:rgba(255,255,255,.80) !important; border:1px solid rgba(12,59,62,.12) !important; border-image:none !important;
+  box-shadow:0 10px 30px rgba(10,30,70,.10) !important;
+  -webkit-backdrop-filter:blur(6px) !important; backdrop-filter:blur(6px) !important;
+}
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .card:hover,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .announce:hover,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .resource-card:hover,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .join-aside:hover,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .pub:hover,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .announce-card:hover,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .logos:hover,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .partners-viewport:hover,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .partner-badge:hover,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .tier:hover,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .partner-card:hover,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .role:hover,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .side-card:hover,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .feature:hover,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .intro-card:hover,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .aside-card:hover,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .get-involved:hover,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .leader:hover,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .mission:hover,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .value:hover,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .detail-panel:hover,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .s-card:hover,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .notice:hover,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .topic:hover,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .event-card:hover,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .what:hover,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .article-card:hover,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .post:hover,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .subscribe:hover,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .carousel:hover,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .policy:hover,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .contact-item:hover,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .author:hover,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .featured-card:hover,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .empty-state:hover,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .combined-card:hover,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .toc:hover,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .check-item:hover,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .founders-item:hover,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .modal-card:hover,
+html body main > .hero.band-light .card:hover,
+html body main > .hero.band-light .announce:hover,
+html body main > .hero.band-light .resource-card:hover,
+html body main > .hero.band-light .join-aside:hover,
+html body main > .hero.band-light .pub:hover,
+html body main > .hero.band-light .announce-card:hover,
+html body main > .hero.band-light .logos:hover,
+html body main > .hero.band-light .partners-viewport:hover,
+html body main > .hero.band-light .partner-badge:hover,
+html body main > .hero.band-light .tier:hover,
+html body main > .hero.band-light .partner-card:hover,
+html body main > .hero.band-light .role:hover,
+html body main > .hero.band-light .side-card:hover,
+html body main > .hero.band-light .feature:hover,
+html body main > .hero.band-light .intro-card:hover,
+html body main > .hero.band-light .aside-card:hover,
+html body main > .hero.band-light .get-involved:hover,
+html body main > .hero.band-light .leader:hover,
+html body main > .hero.band-light .mission:hover,
+html body main > .hero.band-light .value:hover,
+html body main > .hero.band-light .detail-panel:hover,
+html body main > .hero.band-light .s-card:hover,
+html body main > .hero.band-light .notice:hover,
+html body main > .hero.band-light .topic:hover,
+html body main > .hero.band-light .event-card:hover,
+html body main > .hero.band-light .what:hover,
+html body main > .hero.band-light .article-card:hover,
+html body main > .hero.band-light .post:hover,
+html body main > .hero.band-light .subscribe:hover,
+html body main > .hero.band-light .carousel:hover,
+html body main > .hero.band-light .policy:hover,
+html body main > .hero.band-light .contact-item:hover,
+html body main > .hero.band-light .author:hover,
+html body main > .hero.band-light .featured-card:hover,
+html body main > .hero.band-light .empty-state:hover,
+html body main > .hero.band-light .combined-card:hover,
+html body main > .hero.band-light .toc:hover,
+html body main > .hero.band-light .check-item:hover,
+html body main > .hero.band-light .founders-item:hover,
+html body main > .hero.band-light .modal-card:hover{ border-color:rgba(168,116,26,.55) !important; box-shadow:0 18px 40px rgba(10,30,70,.16) !important; }
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .card .card,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .policy .section,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .combined-card .aside-inner,
+html body main > .hero.band-light .card .card,
+html body main > .hero.band-light .policy .section,
+html body main > .hero.band-light .combined-card .aside-inner{
+  background:rgba(12,59,62,.04) !important; box-shadow:none !important; backdrop-filter:none !important; -webkit-backdrop-filter:none !important;
+}
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) input,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) textarea,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) select,
+html body main > .hero.band-light input,
+html body main > .hero.band-light textarea,
+html body main > .hero.band-light select{
+  background:rgba(255,255,255,.92) !important; border:1px solid rgba(12,59,62,.25) !important; color:var(--ink) !important; box-shadow:none !important;
+}
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) input::placeholder,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) textarea::placeholder,
+html body main > .hero.band-light input::placeholder,
+html body main > .hero.band-light textarea::placeholder{ color:rgba(12,59,62,.50) !important; }
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) input:focus,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) textarea:focus,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) select:focus,
+html body main > .hero.band-light input:focus,
+html body main > .hero.band-light textarea:focus,
+html body main > .hero.band-light select:focus{ border-color:var(--teal) !important; box-shadow:0 0 0 3px rgba(168,116,26,.25) !important; outline:none !important; }
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .founders-wrap::before,
+html body main > .hero.band-light .founders-wrap::before{ background:linear-gradient(to right, rgba(var(--paper),.95), transparent) !important; }
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .founders-wrap::after,
+html body main > .hero.band-light .founders-wrap::after{ background:linear-gradient(to left, rgba(var(--paper),.95), transparent) !important; }
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) :is(hr,.sep,.divider),
+html body main > .hero.band-light :is(hr,.sep,.divider){ border-color:rgba(12,59,62,.14) !important; background-color:rgba(12,59,62,.14); }
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .card::before,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .card::after,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .pub::before,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .pub::after,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .s-card::before,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .s-card::after,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .detail-panel::before,
+html body main > :not(.hero):not(.page-hero):not(.page-banner):not(style):not(script) .detail-panel::after,
+html body main > .hero.band-light .card::before,
+html body main > .hero.band-light .card::after,
+html body main > .hero.band-light .pub::before,
+html body main > .hero.band-light .pub::after,
+html body main > .hero.band-light .s-card::before,
+html body main > .hero.band-light .s-card::after,
+html body main > .hero.band-light .detail-panel::before,
+html body main > .hero.band-light .detail-panel::after{ display:none !important; }
+
+/* ---------- FOOTER (navy) ---------- */
+html body footer.site-foot{
+  background:linear-gradient(180deg, rgba(var(--paper),.82) 0, rgba(70,118,114,.72) 38px, rgba(var(--navy),.76) 100px, rgba(var(--navy-deep),.90) 100%) !important;
+  border-top:0 !important; padding-top:110px !important;
+  -webkit-backdrop-filter:blur(4px) !important; backdrop-filter:blur(4px) !important; color:#e6f1ee !important;
+}
+html body footer.site-foot :is(h1,h2,h3,h4,h5,h6,p,li,span,div,strong,small,a,.legal,.muted){ color:#e6f1ee !important; text-shadow:none !important; }
+html body footer.site-foot :is(.legal,.muted,small){ color:#b8d0cb !important; }
+html body footer.site-foot a:hover{ color:#fff !important; }
+
+/* ---------- MODALS stay navy ---------- */
+html body .modal-card, html body #pub-modal > div{
+  background:linear-gradient(180deg, rgba(var(--navy),.99), rgba(var(--navy-deep),.99)) !important; border:1px solid rgba(255,255,255,.22) !important;
+  color:#eaf3ff !important;
+}
+html body .modal-card :is(h1,h2,h3,h4,p,li,span,div,strong,label,small), html body #pub-modal > div :is(h1,h2,h3,h4,p,li,span,div,strong,label,small){ color:#eaf3ff !important; }
+html body .modal-card input, html body .modal-card textarea, html body .modal-card select{ background:rgba(255,255,255,.10) !important; border:1px solid rgba(255,255,255,.30) !important; color:#f2f7ff !important; }
+
+/* event page: its content block is a light section, so give it breathing room */
+html body header.site-header .cta, html body footer.site-foot .cta, html body #mobile-menu .cta{ background:linear-gradient(90deg,#f0c15a,#d9972f) !important; color:#1a1405 !important; }
+html body main > .hero.band-light{ padding-top:40px !important; padding-bottom:48px !important; }
+</style>
+<script>(function(){var m=document.querySelector("main");if(!m)return;var h=m.querySelector(":scope > .hero:not(.band-light), :scope > .page-hero");function s(){var v=h?h.offsetTop+h.offsetHeight:0;m.style.setProperty("--hero-h",v+"px")}s();addEventListener("load",s);addEventListener("resize",s);if(window.ResizeObserver&&h){new ResizeObserver(s).observe(h)}if(document.fonts&&document.fonts.ready)document.fonts.ready.then(s)})();</script>
+<style id="footer-gap-fix">
+/* Remove gap between last section and footer */
+html body footer.site-foot{ margin-top:0 !important; }
+html body main, html body main.wrap{ margin-bottom:0 !important; padding-bottom:48px !important; }
+html body main > :last-child{ margin-bottom:0 !important; }
+html body main + footer.site-foot{ border-top:0 !important; }
+</style>
+</body>
+</html>

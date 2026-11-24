@@ -1,0 +1,308 @@
+<!-- REPLACE your old <section id="how" ...> block with this ENTIRE block -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="" crossorigin="anonymous">
+
+<style>
+  :root{
+    --royal-purple: #6b4aff;
+    --gold: #d4af37;
+    --burnt-orange: #ea580c;
+    --bg: #fffdfd;
+    --muted: #6b7280;
+    --text: #0f1724;
+    --card-border: rgba(15,23,36,0.06);
+    --card-radius: 14px;
+    --card-pad: 20px;
+    --marquee-speed-pxpersec: 80; /* adjust speed here (px/sec) */
+  }
+
+  /* SECTION WRAPPER */
+  .how-section.redesigned{
+    background: linear-gradient(180deg, #ffffff 0%, #fbfbfc 100%);
+    color: var(--text);
+    padding: 56px 20px;
+    overflow: hidden;
+  }
+  .how-container { max-width: 1200px; margin: 0 auto; text-align: center; padding: 0 20px; }
+
+  .how-title { font-size: 36px; margin: 0 0 8px; font-weight: 800; color:var(--text); }
+  .how-subtitle { margin: 6px auto 28px; color:var(--muted); max-width: 780px; font-size: 15.5px; }
+
+  /* MARQUEE WRAPPER */
+  .marquee-wrapper {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    margin: 18px 0 0;
+    /* allow keyboard focus to pause the animation */
+    outline: none;
+  }
+
+  /* the track holds the sequence of cards, duplicated below in the markup for smooth looping */
+  .marquee-track {
+    display: flex;
+    gap: 20px;
+    align-items: stretch;
+    /* animation is set dynamically via --marquee-duration */
+    --marquee-duration: 12s;
+    animation: marquee var(--marquee-duration) linear infinite;
+    will-change: transform;
+  }
+
+  @keyframes marquee {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); } /* assumes duplicated content to create a seamless loop */
+  }
+
+  /* CARD (each how-to) */
+  .how-card {
+    flex: 0 0 auto; /* keep intrinsic width; don't shrink */
+    width: 320px;
+    min-width: 260px;
+    background: white;
+    border: 1px solid var(--card-border);
+    border-radius: var(--card-radius);
+    padding: var(--card-pad);
+    box-shadow: 0 10px 30px rgba(16,24,40,0.04);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 10px;
+  }
+
+  .how-card:focus {
+    outline: 3px solid rgba(107,74,255,0.12);
+    outline-offset: 4px;
+  }
+
+  .how-icon {
+    width: 84px;
+    height: 84px;
+    border-radius: 14px;
+    display: grid;
+    place-items: center;
+    font-size: 32px;
+    color: white;
+    box-shadow: 0 10px 30px rgba(16,24,40,0.08);
+  }
+  /* color variants for icons (you can reuse these classes on cards) */
+  .how-icon.purple { background: linear-gradient(135deg, var(--royal-purple), #4f36d6); }
+  .how-icon.orange { background: linear-gradient(135deg, var(--burnt-orange), #ff934e); }
+  .how-icon.gold   { background: linear-gradient(135deg, var(--gold), #e6c770); color:#0f1724; }
+  .how-icon.teal   { background: linear-gradient(135deg, #1fb6b1, #0ea5a4); }
+
+  .how-card h3 { margin: 6px 0 4px; font-size: 18px; color: var(--royal-purple); font-weight: 700; }
+  .how-card p { margin: 0; color: var(--muted); font-size: 14.5px; line-height: 1.45; }
+
+  /* Small label under icon for clarity on narrow screens */
+  .how-card .how-label { font-size: 12px; color: var(--muted); margin-top: 6px; }
+
+  /* Hover visual */
+  .how-card:hover { transform: translateY(-4px); transition: transform 220ms ease; box-shadow: 0 20px 40px rgba(16,24,40,0.08); }
+
+  /* Controls (optional visible small buttons) */
+  .marquee-controls {
+    margin-top: 12px;
+    display:flex;
+    justify-content:center;
+    gap:10px;
+  }
+  .marquee-btn {
+    background: transparent;
+    border: 1px solid var(--card-border);
+    padding: 8px 10px;
+    border-radius: 10px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .marquee-btn:focus { outline: 3px solid rgba(107,74,255,0.12); }
+
+  /* Responsive: reduce card width on narrow screens */
+  @media (max-width: 900px) {
+    .how-card { width: 280px; min-width: 230px; }
+    .how-icon { width: 72px; height: 72px; font-size: 28px; border-radius: 12px; }
+  }
+  @media (max-width: 640px) {
+    .how-card { width: 240px; min-width: 200px; padding:16px; }
+    .how-icon { width: 64px; height:64px; font-size:24px; }
+    .how-title { font-size: 28px; }
+    .how-subtitle { font-size: 14px; max-width: 360px; }
+  }
+
+  /* Accessibility: respect reduced motion — stop animation and allow manual scrolling */
+  @media (prefers-reduced-motion: reduce) {
+    .marquee-track { animation: none !important; }
+    .marquee-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  }
+
+  /* Pause on hover / focus */
+  .marquee-wrapper:hover .marquee-track,
+  .marquee-wrapper:focus-within .marquee-track {
+    animation-play-state: paused;
+  }
+
+  /* Minor visual polish for container */
+  .how-note { font-size:13px; color:var(--muted); margin-top:10px; }
+</style>
+
+<section id="how" class="how-section redesigned" aria-label="How Nurture Box Edu works">
+  <div class="how-container">
+    <h2 class="how-title heading-font">Simple, Effective, Personalised</h2>
+    <p class="how-subtitle">Three easy steps to personalised 1-on-1 tutoring that fits your child perfectly.</p>
+
+    <!-- MARQUEE: the .marquee-track content is duplicated in the HTML for a seamless loop -->
+    <div class="marquee-wrapper" tabindex="0" aria-roledescription="carousel" aria-label="Steps carousel — auto-scrolling">
+      <div class="marquee-track" id="marqueeTrack" aria-hidden="false">
+        <!-- Item 1 -->
+        <article class="how-card" tabindex="0" role="group" aria-label="Tell us about your child">
+          <div class="how-icon purple" aria-hidden="true"><i class="fa-solid fa-file-lines"></i></div>
+          <h3>Tell Us About Your Child</h3>
+          <p>Fill in our short form to share your child's learning needs, challenges, and goals — it takes less than 2 minutes.</p>
+        </article>
+
+        <!-- Item 2 -->
+        <article class="how-card" tabindex="0" role="group" aria-label="Book a free trial">
+          <div class="how-icon orange" aria-hidden="true"><i class="fa-solid fa-chalkboard-teacher"></i></div>
+          <h3>Book a Free Trial</h3>
+          <p>Schedule a free trial class at a time that works for your family. No pressure, no payment required.</p>
+        </article>
+
+        <!-- Item 3 -->
+        <article class="how-card" tabindex="0" role="group" aria-label="Get matched with the right tutor">
+          <div class="how-icon gold" aria-hidden="true"><i class="fa-solid fa-user-check"></i></div>
+          <h3>Get Matched with the Right Tutor</h3>
+          <p>We hand-pick the tutor best suited to your child's needs, curriculum, and personality.</p>
+        </article>
+
+        <!-- Item 4 -->
+        <article class="how-card" tabindex="0" role="group" aria-label="Watch them thrive">
+          <div class="how-icon teal" aria-hidden="true"><i class="fa-solid fa-seedling"></i></div>
+          <h3>Watch Them Thrive</h3>
+          <p>Personalised lessons built around your child's pace — where confidence grows and learning becomes fun again.</p>
+        </article>
+
+        <!-- Duplicate set for seamless loop (exact same order) -->
+        <article class="how-card" tabindex="0" aria-hidden="true">
+          <div class="how-icon purple" aria-hidden="true"><i class="fa-solid fa-file-lines"></i></div>
+          <h3>Tell Us About Your Child</h3>
+          <p>Fill in our short form to share your child's learning needs, challenges, and goals — it takes less than 2 minutes.</p>
+        </article>
+        <article class="how-card" tabindex="0" aria-hidden="true">
+          <div class="how-icon orange" aria-hidden="true"><i class="fa-solid fa-chalkboard-teacher"></i></div>
+          <h3>Book a Free Trial</h3>
+          <p>Schedule a free trial class at a time that works for your family. No pressure, no payment required.</p>
+        </article>
+        <article class="how-card" tabindex="0" aria-hidden="true">
+          <div class="how-icon gold" aria-hidden="true"><i class="fa-solid fa-user-check"></i></div>
+          <h3>Get Matched with the Right Tutor</h3>
+          <p>We hand-pick the tutor best suited to your child's needs, curriculum, and personality.</p>
+        </article>
+        <article class="how-card" tabindex="0" aria-hidden="true">
+          <div class="how-icon teal" aria-hidden="true"><i class="fa-solid fa-seedling"></i></div>
+          <h3>Watch Them Thrive</h3>
+          <p>Personalised lessons built around your child's pace — where confidence grows and learning becomes fun again.</p>
+        </article>
+      </div>
+    </div>
+
+    <div class="marquee-controls" aria-hidden="true">
+      <button class="marquee-btn" id="pauseBtn" type="button" title="Pause scrolling">Pause</button>
+      <button class="marquee-btn" id="playBtn" type="button" title="Play scrolling" style="display:none">Play</button>
+    </div>
+
+    <div class="how-note">Tip: hover or focus this area to pause the auto-scroll. </div>
+  </div>
+</section>
+
+<script>
+  (function(){
+    const track = document.getElementById('marqueeTrack');
+    const wrapper = track.closest('.marquee-wrapper');
+    const pauseBtn = document.getElementById('pauseBtn');
+    const playBtn = document.getElementById('playBtn');
+
+    // If reduced motion is requested, do nothing (CSS handles it).
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // Compute duration based on half-width (we duplicated content), and desired px/sec speed.
+    function computeAndApplyDuration(){
+      // If reduced motion, skip configuring animation
+      if (reduced) {
+        track.style.animation = 'none';
+        wrapper.style.overflowX = 'auto';
+        return;
+      }
+
+      // total track width (contains both original + duplicate)
+      const totalWidth = track.scrollWidth;
+      // half width is the distance that we want to scroll
+      const halfWidth = totalWidth / 2;
+
+      // desired speed in px per second (tweakable via CSS var)
+      const root = getComputedStyle(document.documentElement);
+      const speedPxPerSec = parseFloat(root.getPropertyValue('--marquee-speed-pxpersec')) || 80;
+
+      // compute seconds needed to travel halfWidth
+      const secs = Math.max(6, (halfWidth / speedPxPerSec)); // clamp minimum duration to 6s
+
+      // apply CSS variable used by the animation
+      track.style.setProperty('--marquee-duration', secs + 's');
+    }
+
+    // Pause / play helpers
+    function pauseMarquee(){
+      track.style.animationPlayState = 'paused';
+      pauseBtn.style.display = 'none';
+      playBtn.style.display = '';
+    }
+    function playMarquee(){
+      track.style.animationPlayState = '';
+      pauseBtn.style.display = '';
+      playBtn.style.display = 'none';
+    }
+
+    // Wire up buttons
+    pauseBtn.addEventListener('click', function(){
+      pauseMarquee();
+      // keep focus visible
+      pauseBtn.focus();
+    });
+    playBtn.addEventListener('click', function(){
+      playMarquee();
+      playBtn.focus();
+    });
+
+    // Pause on focus/hover (keyboard and mouse)
+    wrapper.addEventListener('mouseover', () => { if(!reduced) pauseMarquee(); });
+    wrapper.addEventListener('mouseout', () => { if(!reduced) playMarquee(); });
+    wrapper.addEventListener('focusin', () => { if(!reduced) pauseMarquee(); });
+    wrapper.addEventListener('focusout', () => { if(!reduced) playMarquee(); });
+
+    // Recompute on load + resize (debounced)
+    let resizeTimer;
+    function onResize(){
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        computeAndApplyDuration();
+      }, 120);
+    }
+    window.addEventListener('load', computeAndApplyDuration);
+    window.addEventListener('resize', onResize);
+
+    // initial
+    computeAndApplyDuration();
+
+    // Make sure track has no accidental leftover paused state
+    track.style.animationPlayState = 'running';
+
+    // If user navigates with keyboard, pressing space on wrapper should toggle pause/play.
+    wrapper.addEventListener('keydown', (ev) => {
+      if (ev.code === 'Space') {
+        ev.preventDefault();
+        const isPaused = track.style.animationPlayState === 'paused' || getComputedStyle(track).animationPlayState === 'paused';
+        if (isPaused) playMarquee(); else pauseMarquee();
+      }
+    });
+
+  })();
+</script>
